@@ -69,7 +69,7 @@ Do not put a guessed production URL in the allow-list. Hosted Supabase's default
 
 ## GitHub and Vercel
 
-Phase 2 work is being prepared on the separate review branch `phase-2/supabase-foundation`; the production `main` and Manus canonical remote are not being changed. The app's existing `vercel.json` Vite build and SPA rewrite are preserved. No Vercel settings, environment variables, or deployment were changed or verified in this task; the Vercel connector is not enabled here. The owner has previously described a Vercel deployment, but its URL/project cannot be inspected from the available configuration.
+Phase 2 work is pushed to the separate private GitHub review branch `phase-2/supabase-foundation`. GitHub `main` and the Manus canonical remote were not changed or merged. The app's existing `vercel.json` Vite build and SPA rewrite are preserved. No Vercel settings, environment variables, or deployment were changed or verified in this task; the Vercel connector is not enabled here. The owner has previously described a Vercel deployment, but its URL/project cannot be inspected from the available configuration.
 
 For a Vercel Preview from the review branch, open the existing Vercel project on the tablet and add these two environment variables to the **Preview** environment:
 
