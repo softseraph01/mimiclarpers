@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"Dashboard"},{"path":"/room/:roomId/lobby","title":"Room lobby"},{"path":"/studio/:roomId","title":"Dubbing studio"}]}
