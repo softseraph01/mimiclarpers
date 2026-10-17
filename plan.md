@@ -4,7 +4,7 @@
 
 - The initialized project directory is empty; no existing application work is being replaced.
 - The Manus project runtime is configured for port `3000`. Its managed server and database capabilities are both off, no build/publish configuration is set, and the project has not been deployed.
-- Node.js `22.13.0`, npm `10.9.2`, pnpm `11.25.0`, and Git `2.43.0` are available. TypeScript diagnostics are not registered yet; enable the host-managed TypeScript diagnostics before writing application code.
+- Node.js `22.13.0`, npm `10.9.2`, pnpm `11.25.0`, and Git `2.43.0` are available. TypeScript diagnostics were not registered at initial inspection; host-managed TypeScript diagnostics were enabled before the first application source file was written.
 - The user-selected GitHub repository `softseraph01/mimiclarpers` is empty. The Manus project currently uses a Manus-managed repository. Supabase and Vercel connectors are present but disabled. No Supabase credentials or project URL are configured. Phase 1 will not connect to or write to either service.
 
 ## Recommended architecture
@@ -80,15 +80,12 @@ The active `localDemoRoomService` implements the shared asynchronous `RoomServic
 - **Wordmark & logo:** a compact pair of overlapping speech marks cut by a vertical playhead, paired with a custom-spaced MIMICLARPERS wordmark; treat this as a proposed concept, not an existing brand asset.
 - **Signature brand color:** restrained electric cyan for the playhead, focus ring, and selected action.
 
-## Implementation sequence after plan approval
+## Phase 1 implementation and delivery status
 
-1. Create `TODO.md` with independently deliverable outcomes and the user's actual acceptance clauses; register host-managed TypeScript diagnostics; add the route manifest and dependency/toolchain configuration before installing the first dependencies.
-2. Build the app shell, route structure, design tokens, and accessible responsive UI components.
-3. Implement the dashboard and validated demo room create/join navigation.
-4. Implement the demo room lobby and responsive studio/timeline with conspicuous demo-only notices.
-5. Run the project build/type checks, resolve diagnostics, and inspect the relevant UI at phone/tablet/desktop widths. Confirm Preview readiness and the route manifest.
-6. Save the result as a Manus checkpoint. Before claiming GitHub delivery, explicitly complete the supported repository handoff path or report the precise limitation. Do not publish to Vercel unless it has been configured and a successful deployment is confirmed.
+Phase 1 is implemented: the dashboard, local room create/join flow, lobby, and responsive studio are delivered with conspicuous demo-only status. The async room boundary and pure timeline-edit boundary are used by the UI; authentication, persistence, media upload, recording, and export interfaces are not connected. `pnpm check` and `pnpm build` pass; browser flows and desktop/tablet/phone layouts were inspected, and the route manifest is served as JSON. The resulting source commit was pushed to the Manus-managed `main`; do not claim that it was saved to the selected GitHub repository or deployed to Vercel.
 
-## Immediate next step after this review
+The selected GitHub repository `softseraph01/mimiclarpers` is a separate, existing empty repository. The supported WebDev canonical-connection flow creates a new private repository and does not adopt or rebind an existing repository; choose a supported source-control path before claiming GitHub delivery. No Vercel deployment has been performed.
 
-Approve this architecture or request a change. On approval, create `TODO.md` and begin only the Phase 1 interface. The exact first step for real Supabase-backed rooms after Phase 1 is to create/select the user's Supabase project, provide `VITE_SUPABASE_URL` and the public anon key through protected/environment configuration, then add a first additive migration for profiles/projects/rooms/memberships plus RLS policies before wiring the room service to Supabase. Do not request or place a service-role key in the browser.
+## Next production steps
+
+For real Supabase-backed rooms, create or select the Supabase project, provide `VITE_SUPABASE_URL` and the public anon key through protected/environment configuration, then add the first additive migration for profiles/projects/rooms/memberships with explicit RLS policies before wiring the async room service to Supabase. Do not request or place a service-role key in browser code. Validate authorized create/join behavior before adding private media buckets and Realtime; add conflict/version handling with persistence rather than presenting local demo edits as collaborative. Separately resolve the GitHub repository workflow and connect Vercel before deployment. Assess service, worker, storage, and egress limits when selecting production infrastructure; high-quality mixed-audio export requires an actual render pipeline.
