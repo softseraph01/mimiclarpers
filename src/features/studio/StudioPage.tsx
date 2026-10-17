@@ -119,7 +119,7 @@ export default function StudioPage() {
   return (
     <div className="studio-page">
       <div className="studio-topline">
-        <div className="studio-breadcrumb"><button className="crumb-back" onClick={() => navigate(`/room/${room.id}/lobby`)} aria-label="Back to room lobby"><ArrowLeft size={16} /></button><span className="breadcrumb"><Link to="/">WORKSPACE</Link><span className="breadcrumb__slash">/</span><Link to={`/room/${room.id}/lobby`}>{room.code}</Link><span className="breadcrumb__slash">/</span><span>STUDIO</span></span></div>
+        <div className="studio-breadcrumb"><button className="crumb-back" onClick={() => navigate(`/demo/room/${room.id}/lobby`)} aria-label="Back to room lobby"><ArrowLeft size={16} /></button><span className="breadcrumb"><Link to="/">WORKSPACE</Link><span className="breadcrumb__slash">/</span><Link to={`/demo/room/${room.id}/lobby`}>{room.code}</Link><span className="breadcrumb__slash">/</span><span>STUDIO</span></span></div>
         <div className="studio-status"><span className="demo-mini-tag">DEMO TIMELINE</span><span className="studio-status__sync"><span className="status-dot" /> Local edits only</span></div>
       </div>
       <header className="studio-heading"><div><div className="studio-title-row"><h1>{room.name}</h1><button className="quiet-icon-button" aria-label="Studio options"><Settings2 size={17} /></button></div><p><span className="scene-chip"><Clapperboard size={13} /> {room.sceneTitle}</span><span className="heading-divider" /><span>{room.targetLanguage} dub</span><span className="heading-divider" /><span>Editing independently</span></p></div>
