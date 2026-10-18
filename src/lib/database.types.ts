@@ -84,6 +84,52 @@ export type Database = {
         Update: { owner_id?: string; title?: string; metadata?: Json; updated_at?: string };
         Relationships: [];
       };
+      project_media_assets: {
+        Row: {
+          id: string;
+          project_id: string;
+          room_id: string;
+          uploaded_by: string;
+          kind: 'scene' | 'audio' | 'export';
+          object_path: string;
+          file_name: string;
+          content_type: string;
+          size_bytes: number;
+          duration_seconds: number;
+          upload_status: 'uploading' | 'ready' | 'failed';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          project_id: string;
+          room_id: string;
+          uploaded_by: string;
+          kind: 'scene' | 'audio' | 'export';
+          object_path: string;
+          file_name: string;
+          content_type: string;
+          size_bytes?: number;
+          duration_seconds?: number;
+          upload_status?: 'uploading' | 'ready' | 'failed';
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<Database['public']['Tables']['project_media_assets']['Insert'], 'project_id' | 'room_id' | 'uploaded_by' | 'kind'>>;
+        Relationships: [];
+      };
+      project_editor_state: {
+        Row: { project_id: string; room_id: string; scene_asset_id: string | null; playback_position_seconds: number; revision: number; updated_by: string; updated_at: string };
+        Insert: { project_id: string; room_id: string; scene_asset_id?: string | null; playback_position_seconds?: number; revision?: number; updated_by: string; updated_at?: string };
+        Update: { scene_asset_id?: string | null; playback_position_seconds?: number; revision?: number; updated_by?: string; updated_at?: string };
+        Relationships: [];
+      };
+      timeline_clips: {
+        Row: { id: string; project_id: string; room_id: string; media_asset_id: string; track_user_id: string; created_by: string; label: string; start_seconds: number; source_offset_seconds: number; duration_seconds: number; segment_index: number; sort_order: number; revision: number; created_at: string; updated_at: string };
+        Insert: { id?: string; project_id: string; room_id: string; media_asset_id: string; track_user_id: string; created_by: string; label: string; start_seconds?: number; source_offset_seconds?: number; duration_seconds: number; segment_index?: number; sort_order?: number; revision?: number; created_at?: string; updated_at?: string };
+        Update: { label?: string; start_seconds?: number; source_offset_seconds?: number; duration_seconds?: number; segment_index?: number; sort_order?: number; revision?: number; updated_at?: string };
+        Relationships: [];
+      };
       room_presence: {
         Row: { room_id: string; user_id: string; connection_id: string; last_seen_at: string };
         Insert: { room_id: string; user_id: string; connection_id: string; last_seen_at?: string };

@@ -126,13 +126,13 @@ export default function LocalRecorder({ onClipSaved }: LocalRecorderProps) {
 
   return <section className="recorder-card" aria-label="Microphone recorder">
     <div className="recorder-card__heading"><div><span className="eyebrow">LOCAL CAPTURE</span><h3>Record a voice take</h3></div><span className={`recorder-led${isRecording ? ' is-live' : ''}`}><span className="status-dot" /> {isRecording ? 'RECORDING' : 'READY'}</span></div>
-    <p className="recorder-card__copy">Capture a real microphone take, preview it, and place it on your participant track. This browser-only take is not uploaded or shared.</p>
+    <p className="recorder-card__copy">Capture a real microphone take, preview it, and save it to your private participant track. The studio uploads it only after recording stops.</p>
     <label className="field-label" htmlFor="voice-take-label">Take label<input id="voice-take-label" className="text-input" value={label} onChange={(event) => setLabel(event.target.value)} maxLength={64} disabled={isRecording || busy} /></label>
     <div className="recorder-card__actions">
       {!isRecording ? <button className="button button--record" type="button" onClick={() => void startRecording()} disabled={busy}>{busy ? 'Opening microphone…' : <><Mic2 size={15} /> Start recording</>}</button> : <button className="button button--record is-recording" type="button" onClick={stopRecording} disabled={busy}><Square size={14} fill="currentColor" /> Stop recording</button>}
       {clip && <button className="button button--quiet button--small" type="button" onClick={clearClip} disabled={isRecording}><Trash2 size={14} /> Clear take</button>}
     </div>
     {error && <p className="form-error" role="alert">{error}</p>}
-    {clip && audioUrl && <div className="recorded-clip" role="status"><div className="recorded-clip__icon"><Waves size={17} /></div><div className="recorded-clip__body"><strong>{clip.label}</strong><span>{formatDuration(clip.durationSeconds)} · browser-only take · {new Date(clip.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span><audio controls src={audioUrl}>Your browser cannot play this audio preview.</audio></div><button className="icon-button" type="button" onClick={downloadClip} aria-label="Download recorded voice take" title="Download recorded voice take"><Download size={16} /></button></div>}
+    {clip && audioUrl && <div className="recorded-clip" role="status"><div className="recorded-clip__icon"><Waves size={17} /></div><div className="recorded-clip__body"><strong>{clip.label}</strong><span>{formatDuration(clip.durationSeconds)} · ready to save · {new Date(clip.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span><audio controls src={audioUrl}>Your browser cannot play this audio preview.</audio></div><button className="icon-button" type="button" onClick={downloadClip} aria-label="Download recorded voice take" title="Download recorded voice take"><Download size={16} /></button></div>}
   </section>;
 }

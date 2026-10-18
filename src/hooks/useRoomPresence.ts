@@ -68,7 +68,10 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
           .select('room_id, user_id, connection_id, last_seen_at')
           .eq('room_id', roomId);
         if (error) throw error;
-        if (active) setRows(data ?? []);
+        if (active) {
+          setRows(data ?? []);
+          setStatus('connected');
+        }
       } catch {
         if (active) setStatus('unavailable');
       }
@@ -97,16 +100,15 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
         ]);
       });
 
+    void heartbeat();
+    heartbeatTimer = window.setInterval(() => void heartbeat(), HEARTBEAT_MS);
+
     channel.subscribe((channelStatus) => {
       if (!active) return;
       if (channelStatus === 'SUBSCRIBED') {
         setStatus('connected');
-        void heartbeat();
-        if (heartbeatTimer === undefined) heartbeatTimer = window.setInterval(() => void heartbeat(), HEARTBEAT_MS);
       } else if (channelStatus === 'CHANNEL_ERROR' || channelStatus === 'TIMED_OUT' || channelStatus === 'CLOSED') {
         setStatus('unavailable');
-        if (heartbeatTimer !== undefined) window.clearInterval(heartbeatTimer);
-        heartbeatTimer = undefined;
       }
     });
 
