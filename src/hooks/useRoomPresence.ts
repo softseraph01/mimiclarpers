@@ -30,7 +30,7 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
       setStatus('not-applicable');
       return;
     }
-    if (!client) {
+    if (!client || !session?.access_token) {
       setRows([]);
       setStatus('unavailable');
       return;
@@ -46,15 +46,11 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
       setStatus('unavailable');
       return;
     }
+
     setRows([]);
     setStatus('connecting');
     const clockTimer = window.setInterval(() => setNow(Date.now()), REFRESH_CLOCK_MS);
-
-    if (session?.access_token) {
-      void client.realtime.setAuth(session.access_token).catch(() => {
-        if (active) setStatus('unavailable');
-      });
-    }
+    const channel = client.channel(`room-presence:${roomId}`, { config: { private: true } });
 
     const heartbeat = async () => {
       try {
@@ -70,6 +66,8 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
         if (error) throw error;
         if (active) {
           setRows(data ?? []);
+          // The database heartbeat is the source of truth for availability. A
+          // Realtime channel can reconnect independently without hiding users.
           setStatus('connected');
         }
       } catch {
@@ -77,9 +75,14 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
       }
     };
 
-    const channel = client
-      .channel(`room-presence:${roomId}`, { config: { private: true } })
-      .on('postgres_changes', {
+    const start = async () => {
+      try {
+        await client.realtime.setAuth(session.access_token);
+      } catch {
+        // Presence still has a database-heartbeat fallback; do not fail setup.
+      }
+      if (!active) return;
+      channel.on('postgres_changes', {
         event: '*',
         schema: 'public',
         table: 'room_presence',
@@ -99,18 +102,17 @@ export function useRoomPresence(roomId: string, enabled: boolean) {
           row,
         ]);
       });
-
-    void heartbeat();
-    heartbeatTimer = window.setInterval(() => void heartbeat(), HEARTBEAT_MS);
-
-    channel.subscribe((channelStatus) => {
-      if (!active) return;
-      if (channelStatus === 'SUBSCRIBED') {
-        setStatus('connected');
-      } else if (channelStatus === 'CHANNEL_ERROR' || channelStatus === 'TIMED_OUT' || channelStatus === 'CLOSED') {
-        setStatus('unavailable');
-      }
-    });
+      channel.subscribe((channelStatus) => {
+        if (!active) return;
+        if (channelStatus === 'SUBSCRIBED') setStatus('connected');
+        // A channel reconnect must not override a successful heartbeat.
+        // The next heartbeat will mark the status unavailable only if the
+        // authenticated database path itself is unhealthy.
+      });
+      void heartbeat();
+      heartbeatTimer = window.setInterval(() => void heartbeat(), HEARTBEAT_MS);
+    };
+    void start();
 
     return () => {
       active = false;

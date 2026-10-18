@@ -7,10 +7,12 @@ type ClipRow = Database['public']['Tables']['timeline_clips']['Row'];
 type MediaKind = MediaRow['kind'];
 export type PersistentMediaAsset = MediaRow & { signedUrl: string };
 export type PersistentTimelineClip = ClipRow & { audioUrl: string };
+export type TrackMixSettings = Record<string, { muted: boolean; volume: number }>;
 export type PersistentStudioWorkspace = {
   scene: PersistentMediaAsset | null;
   clips: PersistentTimelineClip[];
   playbackPositionSeconds: number;
+  trackMix: TrackMixSettings;
   revision: number;
 };
 
@@ -37,6 +39,20 @@ async function mapAsset(row: MediaRow): Promise<PersistentMediaAsset> {
 
 function safeFileName(name: string) {
   return name.trim().replace(/[^a-zA-Z0-9._-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 120) || 'media';
+}
+
+function normalizeTrackMix(value: unknown): TrackMixSettings {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {};
+  const result: TrackMixSettings = {};
+  for (const [userId, setting] of Object.entries(value)) {
+    if (!setting || typeof setting !== 'object' || Array.isArray(setting)) continue;
+    const candidate = setting as { muted?: unknown; volume?: unknown };
+    const volume = typeof candidate.volume === 'number' && Number.isFinite(candidate.volume)
+      ? Math.max(0, Math.min(1, candidate.volume))
+      : 1;
+    result[userId] = { muted: candidate.muted === true, volume };
+  }
+  return result;
 }
 
 async function insertUpload(input: { projectId: string; roomId: string; kind: MediaKind; file: File | Blob; fileName: string; contentType: string }) {
@@ -82,7 +98,7 @@ export const supabaseStudioService = {
   async getWorkspace(projectId: string): Promise<PersistentStudioWorkspace> {
     const db = client();
     const [{ data: state, error: stateError }, { data: assets, error: assetError }, { data: clips, error: clipError }] = await Promise.all([
-      db.from('project_editor_state').select('project_id, room_id, scene_asset_id, playback_position_seconds, revision, updated_by, updated_at').eq('project_id', projectId).maybeSingle(),
+      db.from('project_editor_state').select('project_id, room_id, scene_asset_id, playback_position_seconds, track_mix, revision, updated_by, updated_at').eq('project_id', projectId).maybeSingle(),
       db.from('project_media_assets').select('*').eq('project_id', projectId).eq('upload_status', 'ready').order('created_at', { ascending: false }),
       db.from('timeline_clips').select('*').eq('project_id', projectId).order('start_seconds', { ascending: true }).order('sort_order', { ascending: true }),
     ]);
@@ -106,6 +122,7 @@ export const supabaseStudioService = {
       scene,
       clips: clipUrls.flatMap((entry) => entry ? [{ ...entry.clip, audioUrl: entry.audioUrl }] : []),
       playbackPositionSeconds: Number(state?.playback_position_seconds ?? 0),
+      trackMix: normalizeTrackMix(state?.track_mix),
       revision: Number(state?.revision ?? 1),
     };
   },
@@ -180,13 +197,14 @@ export const supabaseStudioService = {
     const { error } = await client().from('timeline_clips').delete().eq('id', clipId);
     if (error) throw error;
   },
-  async saveEditorState(input: { projectId: string; roomId: string; sceneAssetId: string | null; playbackPositionSeconds: number; revision: number }) {
+  async saveEditorState(input: { projectId: string; roomId: string; sceneAssetId: string | null; playbackPositionSeconds: number; trackMix: TrackMixSettings; revision: number }) {
     const userId = await currentUserId();
     const { error } = await client().from('project_editor_state').upsert({
       project_id: input.projectId,
       room_id: input.roomId,
       scene_asset_id: input.sceneAssetId,
       playback_position_seconds: Math.max(0, input.playbackPositionSeconds),
+      track_mix: input.trackMix,
       revision: Math.max(1, input.revision + 1),
       updated_by: userId,
     });

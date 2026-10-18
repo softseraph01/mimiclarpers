@@ -119,9 +119,9 @@ export type Database = {
         Relationships: [];
       };
       project_editor_state: {
-        Row: { project_id: string; room_id: string; scene_asset_id: string | null; playback_position_seconds: number; revision: number; updated_by: string; updated_at: string };
-        Insert: { project_id: string; room_id: string; scene_asset_id?: string | null; playback_position_seconds?: number; revision?: number; updated_by: string; updated_at?: string };
-        Update: { scene_asset_id?: string | null; playback_position_seconds?: number; revision?: number; updated_by?: string; updated_at?: string };
+        Row: { project_id: string; room_id: string; scene_asset_id: string | null; playback_position_seconds: number; track_mix: Json; revision: number; updated_by: string; updated_at: string };
+        Insert: { project_id: string; room_id: string; scene_asset_id?: string | null; playback_position_seconds?: number; track_mix?: Json; revision?: number; updated_by: string; updated_at?: string };
+        Update: { scene_asset_id?: string | null; playback_position_seconds?: number; track_mix?: Json; revision?: number; updated_by?: string; updated_at?: string };
         Relationships: [];
       };
       timeline_clips: {
