@@ -7,7 +7,7 @@ Acceptance criteria delivered:
 - Persist participant track identity, clip start/source-offset/duration timestamps, segment revisions, and shared editor playhead state.
 - Authorized room members can read the shared scene/timeline; clip mutation is creator-scoped so one member cannot overwrite or delete another member’s recording.
 - Keep the existing retro-futuristic/glassmorphism studio and Android-friendly controls; keep export/render explicitly unavailable until a server-side media worker exists.
-Evidence: Supabase migration `20261018150000_persistent_studio_media` applied successfully; live readback shows the new RLS tables and private bucket with zero test rows. `PersistentStudioPage.tsx` and `supabaseStudio.ts` now use signed URLs, durable scene/take uploads, saved clip edits, and editor-state persistence. `pnpm check`, `pnpm build`, and `git diff --check` pass. No real account/media upload or two-account authorization test was performed in this session.
+Evidence: Supabase migration `20261018092620_persistent_studio_media` applied successfully; live readback shows the new RLS tables and private bucket with zero test rows. `PersistentStudioPage.tsx` and `supabaseStudio.ts` now use signed URLs, durable scene/take uploads, saved clip edits, and editor-state persistence. `pnpm check`, `pnpm build`, and `git diff --check` pass. No real account/media upload or two-account authorization test was performed in this session.
 
 ## Phase 3.3 remaining verification and collaboration — open
 - Create/use two real permanent accounts on the authorized Preview, upload a scene, record a take, refresh, and verify the scene/take/clip/playhead survive.
