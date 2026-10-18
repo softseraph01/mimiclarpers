@@ -22,11 +22,11 @@ The database history was read back and matches all three filenames/versions. All
 
 The Supabase security advisor reports 11 `SECURITY DEFINER` execution warnings: one for the intentionally public, safe-metadata `list_public_rooms()` function and ten for authenticated room operations, including the presence lease RPCs. These functions use a fixed empty `search_path`, schema-qualified references, narrow role grants, and in-function authorization. The warnings remain visible for review; they are not treated as proof of security. Two-account authorization tests remain outstanding. The project has no app rows/traffic yet, so unused-index advisories are informational; do not drop intentionally added indexes solely on that basis.
 
-### Realtime privacy setup still required
+### Realtime privacy status
 
 The application no longer trusts identity values in a client-supplied Presence payload. Each browser connection receives a random connection UUID and refreshes its short-lived lease through `set_room_presence`, which derives the user from the authenticated JWT and checks room membership. `clear_room_presence` can mark only the caller's own connection offline. The member-only RLS policy controls reads from `room_presence`, and the client receives changes through a private, room-scoped Postgres Changes channel. The heartbeat runs every 15 seconds, online status expires after 45 seconds, and old leases are cleaned after two minutes. Membership and projects remain in PostgreSQL.
 
-The available Supabase management tools do not expose the project-wide **Allow public access** channel setting, so that setting has not been inspected or changed. Before claiming private-channel isolation, open the project in the Supabase Dashboard on the tablet, go to Realtime settings, turn off public-channel access, and verify it is off. Then test that an authorized room member can receive presence changes while a non-member cannot. Do not treat policy SQL alone as verification of channel isolation.
+The project owner has confirmed that the Supabase project-wide **Allow public access** setting is OFF. The Sandbox browser remained at the Dashboard sign-in page, so this is owner-confirmed rather than independently inspected. Two-account Realtime authorization tests are still outstanding; do not claim end-to-end channel isolation until an authorized member and a non-member have been tested.
 
 ## Local development
 
