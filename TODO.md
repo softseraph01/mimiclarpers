@@ -167,3 +167,9 @@ Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired
 - Vercel Preview has the existing DUBROOM Supabase URL and enabled public publishable key configured.
 - Email, password, and display-name fields remain typable when configuration is missing; only the submit action is blocked until the public configuration exists.
 - Pending verification: deploy this branch and confirm the live Preview has no configuration warning and accepts typing.
+
+## Supabase confirmation redirect — code/template prepared, fresh-link verification pending
+- `signUp` now calls an explicit helper that builds `/auth?next=...` from `window.location.origin`; deployed Vercel builds therefore use their current HTTPS origin, while local development uses localhost only when actually running locally.
+- Added `supabase/templates/confirm-signup.html`; the hosted Confirm signup template must use `{{ .ConfirmationURL }}` so Supabase preserves the requested `emailRedirectTo` destination. Do not use `{{ .SiteURL }}` or a hardcoded localhost URL.
+- The exact current Preview callback to allow-list is `https://mimiclarpers-ga2appfdr-larper5.vercel.app/auth`; a new deployment hostname must be allow-listed before testing that deployment.
+- The Supabase connector does not expose hosted Auth URL/template settings, and no fresh confirmation email was available to click in this session. Do not claim the redirect is fixed until a newly generated link returns to the Vercel Preview `/auth` route.

@@ -19,6 +19,14 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function getEmailConfirmationRedirect(returnTo: string) {
+  // On Vercel this is the current HTTPS Preview/production origin; localhost
+  // is used only when the app is actually running locally.
+  const redirectUrl = new URL('/auth', window.location.origin);
+  redirectUrl.searchParams.set('next', returnTo);
+  return redirectUrl.toString();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [authReady, setAuthReady] = useState(!supabaseConfigured);
@@ -94,17 +102,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = useCallback(async (email: string, password: string, displayName: string, returnTo: string) => {
     if (!supabase) throw new Error('Supabase is not configured for this build.');
-    // Keep the callback origin/path stable so it can be allow-listed exactly in
-    // Supabase Auth URL Configuration. The requested destination is safe UI
-    // state, not a second callback URL.
-    const redirectUrl = new URL('/auth', window.location.origin);
-    redirectUrl.searchParams.set('next', returnTo);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
         data: { display_name: displayName.trim() },
-        emailRedirectTo: redirectUrl.toString(),
+        // Keep the callback origin/path stable so it can be allow-listed exactly
+        // in Supabase Auth URL Configuration. The requested destination is safe
+        // UI state, not a second callback URL.
+        emailRedirectTo: getEmailConfirmationRedirect(returnTo),
       },
     });
     if (error) throw error;

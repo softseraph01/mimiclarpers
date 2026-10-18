@@ -65,7 +65,11 @@ On an Android tablet, open the Supabase Dashboard, select project `zwuddcotycuzf
 - `https://<Vercel-Preview-domain>/auth`
 - `https://<verified-production-domain>/auth`
 
-Do not put a guessed production URL in the allow-list. Hosted Supabase's default email sender is intended for limited testing; use a separately configured SMTP provider before relying on account emails for a real group.
+Do not put a guessed production URL in the allow-list. The current fix Preview deployment is `https://mimiclarpers-ga2appfdr-larper5.vercel.app/auth`; add that exact URL after confirming the deployment you are testing. If a later Vercel deployment receives a different hostname, add that new exact `/auth` URL before requesting another signup.
+
+In **Authentication → Email Templates → Confirm signup**, use the hosted template source in [`supabase/templates/confirm-signup.html`](supabase/templates/confirm-signup.html). The confirmation button must use `{{ .ConfirmationURL }}`. Do not hardcode `http://localhost:3000`, `{{ .SiteURL }}`, or a guessed Vercel URL in the button: `{{ .ConfirmationURL }}` contains Supabase's verification endpoint and the `emailRedirectTo` destination generated from the current browser origin. This keeps the token verification flow in Supabase while returning the user to `/auth` on the same deployed origin.
+
+After saving the template and URL allow-list, create a fresh signup on the Vercel Preview. Do not reuse an old confirmation email. A successful test must end at the same Vercel Preview `/auth` URL, not localhost; until that fresh-link test is completed, the redirect is not considered verified. Hosted Supabase's default email sender is intended for limited testing; use a separately configured SMTP provider before relying on account emails for a real group.
 
 ## GitHub and Vercel
 
