@@ -511,7 +511,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .route-loading { min-height: 45vh; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--text-soft); font: 500 11px var(--mono); }
 
 
-/* Phase 2 security states: readable live-status and deliberate owner handoff. */
+/* Readable live-status and deliberate owner handoff states. */
 .presence-note { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; min-height: 36px; line-height: 1.45; }
 .owner-handoff-panel { display: grid; gap: 10px; margin-top: 14px; padding: 13px; border: 1px solid var(--line); border-radius: 12px; background: rgba(12, 16, 36, .58); }
 .owner-handoff-panel p, .owner-handoff-panel small { margin: 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
@@ -623,3 +623,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .room-list-item__delete:hover,.room-list-item__delete:focus-visible { border-color:var(--coral); background:rgba(255,122,144,.16); }
 @keyframes studio-pulse { 50% { opacity:.35; transform:scale(.7); } }
 @media (max-width:700px) { .compact-recorder { flex-wrap:wrap; } .compact-recorder__review { width:100%; margin-left:58px; } .compact-recorder__review audio { flex:1; width:auto; } .track-volume { width:46px; } }
+
+
+/* Final UI polish: keep editing controls close to the selected clip. */
+.app-footer__social { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); text-decoration: none; transition: color .15s ease; }
+.app-footer__social:hover, .app-footer__social:focus-visible { color: var(--cyan); }
+.clip-mix-controls { display: grid; gap: 8px; margin: 0 0 13px; padding: 10px 11px; border: 1px solid rgba(85,231,242,.16); border-radius: 10px; background: rgba(85,231,242,.045); }
+.clip-mix-controls__heading, .clip-mix-controls__slider { display: flex; align-items: center; gap: 9px; }
+.clip-mix-controls__heading { justify-content: space-between; }
+.clip-mix-controls__slider .track-volume { width: min(280px, 100%); flex: 1; }
+.clip-mix-controls__slider output { min-width: 38px; color: var(--text-soft); font: 8px var(--mono); text-align: right; }
+.clip-mix-controls .track-mix-button { margin-left: 0; min-width: 36px; min-height: 36px; width: 36px; height: 36px; }
+.clip-block__handles { pointer-events: auto; }
+.clip-block__handle { display: flex; align-items: center; justify-content: center; width: 20px; height: 100%; margin: 0 -6px; pointer-events: auto; cursor: ew-resize; touch-action: none; }
+.clip-block__handle i { width: 3px; height: 22px; margin-top: 0; }
+@media (max-width: 520px) {
+  .app-footer__social { gap: 4px; }
+  .clip-mix-controls { padding: 9px; }
+  .clip-block__handle { width: 24px; }
+}

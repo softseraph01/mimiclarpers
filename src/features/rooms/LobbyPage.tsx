@@ -37,7 +37,7 @@ export default function LobbyPage() {
   }
 
   if (room === null) {
-    return <section className="empty-state panel"><span className="panel-icon panel-icon--amber"><Clapperboard size={19} /></span><h1>This demo room isn't here</h1><p>New rooms only live in the current browser session. Return to the dashboard to create another.</p><Link className="button button--primary" to="/">Back to workspace <ArrowRight size={16} /></Link></section>;
+    return <section className="empty-state panel"><span className="panel-icon panel-icon--amber"><Clapperboard size={19} /></span><h1>This demo room isn't here</h1><p>Return to the dashboard to create another sample room.</p><Link className="button button--primary" to="/">Back to workspace <ArrowRight size={16} /></Link></section>;
   }
 
   return (
@@ -70,7 +70,7 @@ export default function LobbyPage() {
           <div className="scene-footnote">Scene and cast details are illustrative. No media asset is stored in this room.</div>
         </section>
       </div>
-      <div className="lobby-bottom-note"><span className="status-dot" /> This is a visual room preview, not a live multiplayer room.</div>
+      <div className="lobby-bottom-note"><span className="status-dot" /> Explore the sample room and try the timeline.</div>
     </div>
   );
 }

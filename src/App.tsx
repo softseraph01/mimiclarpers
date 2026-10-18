@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, type ReactNode } from 'react';
-import { ArrowUpRight, Clapperboard, Compass, Home, LogOut, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Clapperboard, Compass, Home, Instagram, LogOut, Sparkles } from 'lucide-react';
 import { Link, NavLink, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import BrandMark from './components/BrandMark';
@@ -53,8 +53,8 @@ function AppShell({ demo = false }: { demo?: boolean }) {
   return <div className={`app-frame${demo ? ' app-frame--demo' : ''}`}>
     <div className="ambient-backdrop" aria-hidden="true"><span /><span /><span /></div>
     <div className={demo ? 'demo-ribbon demo-ribbon--sample' : 'demo-ribbon'}>
-      <span className="demo-ribbon__tag"><span className="status-dot" /> {demo ? 'SAMPLE EXPERIENCE' : 'ROOMS · PROJECTS · MEMBERS'}</span>
-      <span>{demo ? 'Sample cast and timeline edits stay in this page. No data is saved or synchronized.' : 'Room membership and projects persist. Recording, uploads, live editing, and export are later phases.'}</span>
+      <span className="demo-ribbon__tag"><span className="status-dot" /> {demo ? 'SAMPLE EXPERIENCE' : 'SHARED ROOMS · LIVE STUDIOS'}</span>
+      <span>{demo ? 'A guided sample cast and timeline.' : 'Bring your cast together and voice the scene.'}</span>
     </div>
     <header className="topbar">
       <Link className="brand" to={user ? '/' : '/rooms'} aria-label="DUBROOM workspace"><span className="brand-mark"><BrandMark /></span><span className="brand-word">DUB<span>ROOM</span></span></Link>
@@ -63,14 +63,14 @@ function AppShell({ demo = false }: { demo?: boolean }) {
         <NavLink to="/rooms" className={({ isActive }) => `topnav__link${isActive ? ' is-active' : ''}`}><Compass size={16} /> Public rooms</NavLink>
       </nav>
       <div className="topbar__right">
-        <span className="environment-pill"><Sparkles size={13} /> {demo ? 'Sample' : 'Phase 2'}</span>
+        <span className="environment-pill"><Sparkles size={13} /> {demo ? 'Sample' : 'Live'}</span>
         {user ? <><Link className="user-chip" to="/profile" aria-label={`Profile for ${displayName}`}><span className="avatar avatar--cyan">{initials}</span><span>{displayName}</span></Link><button className="sign-out-button" type="button" onClick={() => void leaveAccount()} disabled={signingOut} aria-label="Sign out"><LogOut size={16} /></button></> : <Link className="button button--quiet button--small" to="/auth">Sign in <ArrowUpRight size={14} /></Link>}
       </div>
     </header>
     {authNotice && <div className="shell-error" role="status">{authNotice}</div>}
     {signOutError && <div className="shell-error" role="alert">{signOutError}</div>}
     <main className="page-view"><Outlet /></main>
-    <footer className="app-footer"><span>DUBROOM</span><span>{demo ? 'Illustrative sample · no database writes' : 'Rooms + projects · Supabase-backed'}</span></footer>
+    <footer className="app-footer"><span>DUBROOM</span><span><a className="app-footer__social" href="https://www.instagram.com/btw_beast07/" target="_blank" rel="noreferrer"><Instagram size={13} /> Instagram · @btw_beast07</a></span></footer>
   </div>;
 }
 
