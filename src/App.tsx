@@ -52,10 +52,6 @@ function AppShell({ demo = false }: { demo?: boolean }) {
 
   return <div className={`app-frame${demo ? ' app-frame--demo' : ''}`}>
     <div className="ambient-backdrop" aria-hidden="true"><span /><span /><span /></div>
-    <div className={demo ? 'demo-ribbon demo-ribbon--sample' : 'demo-ribbon'}>
-      <span className="demo-ribbon__tag"><span className="status-dot" /> {demo ? 'SAMPLE EXPERIENCE' : 'SHARED ROOMS · LIVE STUDIOS'}</span>
-      <span>{demo ? 'A guided sample cast and timeline.' : 'Bring your cast together and voice the scene.'}</span>
-    </div>
     <header className="topbar">
       <Link className="brand" to={user ? '/' : '/rooms'} aria-label="DUBROOM workspace"><span className="brand-mark"><BrandMark /></span><span className="brand-word">DUB<span>ROOM</span></span></Link>
       <nav className="topnav" aria-label="Main navigation">
