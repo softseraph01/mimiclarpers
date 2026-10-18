@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, type ReactNode } from 'react';
-import { ArrowUpRight, Clapperboard, Compass, Home, Instagram, LogOut, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Clapperboard, Compass, Home, Instagram, LogOut } from 'lucide-react';
 import { Link, NavLink, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import BrandMark from './components/BrandMark';
@@ -59,7 +59,7 @@ function AppShell({ demo = false }: { demo?: boolean }) {
         <NavLink to="/rooms" className={({ isActive }) => `topnav__link${isActive ? ' is-active' : ''}`}><Compass size={16} /> Public rooms</NavLink>
       </nav>
       <div className="topbar__right">
-        <span className="environment-pill"><Sparkles size={13} /> {demo ? 'Sample' : 'Live'}</span>
+        <a className="environment-pill" href="https://www.instagram.com/btw_beast07/" target="_blank" rel="noreferrer" aria-label="Open developer Instagram profile"><Instagram size={13} /> DEV'S @</a>
         {user ? <><Link className="user-chip" to="/profile" aria-label={`Profile for ${displayName}`}><span className="avatar avatar--cyan">{initials}</span><span>{displayName}</span></Link><button className="sign-out-button" type="button" onClick={() => void leaveAccount()} disabled={signingOut} aria-label="Sign out"><LogOut size={16} /></button></> : <Link className="button button--quiet button--small" to="/auth">Sign in <ArrowUpRight size={14} /></Link>}
       </div>
     </header>
