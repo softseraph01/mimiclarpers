@@ -92,7 +92,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .text-link:hover { color: #b7fbff; }
 .side-rail__footer { display: flex; align-items: center; gap: 8px; margin: 20px 5px 0; color: #77728f; font: 7px var(--mono); letter-spacing: .11em; }
 .side-rail__pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--violet); box-shadow: 0 0 10px rgba(139,92,246,.7); }
-.page-view { width: calc(100% - 230px); min-width: 0; padding: 29px clamp(20px,3.3vw,48px) 52px; }
+.page-view { width: 100%; min-width: 0; padding: 29px clamp(20px,3.3vw,48px) 52px; }
 .app-footer { min-height: 42px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 clamp(16px,3vw,42px); border-top: 1px solid rgba(214,205,255,.08); color: var(--text-dim); background: rgba(13,15,31,.55); font: 8px var(--mono); letter-spacing: .07em; }
 .app-footer span:first-child { color: var(--lavender); font-family: var(--display); font-weight: 700; }
 
@@ -401,8 +401,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .empty-state p { color: var(--text-soft); }
 
 @media (max-width: 1000px) {
-  .side-rail { width: 200px; flex-basis: 200px; }
-  .page-view { width: calc(100% - 200px); padding-right: 25px; padding-left: 25px; }
+  .page-view { width: 100%; padding-right: 25px; padding-left: 25px; }
   .dashboard-hero { gap: 24px; }
   .start-grid { grid-template-columns: 1fr 1fr; }
   .lobby-hero { grid-template-columns: minmax(200px,.72fr) minmax(0,1.28fr); }

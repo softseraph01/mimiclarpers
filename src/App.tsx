@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, type ReactNode } from 'react';
-import { ArrowUpRight, Clapperboard, Compass, Home, LogOut, Sparkles, UsersRound } from 'lucide-react';
+import { ArrowUpRight, Clapperboard, Compass, Home, LogOut, Sparkles } from 'lucide-react';
 import { Link, NavLink, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import BrandMark from './components/BrandMark';
@@ -69,15 +69,7 @@ function AppShell({ demo = false }: { demo?: boolean }) {
     </header>
     {authNotice && <div className="shell-error" role="status">{authNotice}</div>}
     {signOutError && <div className="shell-error" role="alert">{signOutError}</div>}
-    <div className="workspace-frame">
-      <aside className="side-rail" aria-label="Workspace navigation">
-        <div className="side-rail__section"><span className="eyebrow">YOUR STUDIO</span>{user && <NavLink to="/" end className={({ isActive }) => `side-link${isActive ? ' is-active' : ''}`}><Home size={16} /> Workspace</NavLink>}<NavLink to="/rooms" className={({ isActive }) => `side-link${isActive ? ' is-active' : ''}`}><UsersRound size={16} /> Public rooms</NavLink><NavLink to="/demo/room/scene-042/lobby" className={({ isActive }) => `side-link${isActive ? ' is-active' : ''}`}><Clapperboard size={16} /> Sample scene <span className="side-link__badge">DEMO</span></NavLink></div>
-        <div className="side-rail__divider" />
-        <div className="side-note"><span className="side-note__icon"><Sparkles size={15} /></span><p>Every great dub starts with a scene and a friend.</p><Link to={user ? '/' : '/auth'} className="text-link">{user ? 'Start a room' : 'Join the call-sheet'} <ArrowUpRight size={14} /></Link></div>
-        <div className="side-rail__footer"><span className="side-rail__pulse" /> {demo ? 'SAMPLE SCENE' : 'DUBROOM WORKSPACE'}</div>
-      </aside>
-      <main className="page-view"><Outlet /></main>
-    </div>
+    <main className="page-view"><Outlet /></main>
     <footer className="app-footer"><span>DUBROOM</span><span>{demo ? 'Illustrative sample · no database writes' : 'Rooms + projects · Supabase-backed'}</span></footer>
   </div>;
 }
