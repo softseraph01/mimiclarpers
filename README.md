@@ -90,3 +90,13 @@ The `phase-3/mvp-recording` branch adds a real browser microphone capture milest
 The signup callback was also corrected to use the exact current-origin `/auth` path, with the safe internal `next` destination carried as query state. In Supabase Dashboard → Authentication → URL Configuration, add the exact callback origins used today, such as `http://localhost:3000/auth`, the current Preview origin plus `/auth`, and the verified Vercel origin plus `/auth`. Do not add a guessed production URL. The browser still uses only `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`; no service-role key is needed.
 
 On an Android tablet, test the milestone from a secure HTTPS Preview or localhost: sign in, open a room lobby, enter its studio, tap **Start recording**, allow microphone access, speak, tap **Stop recording**, play the preview, and use the download icon. If Chrome has a previous denial, open the site permissions and set Microphone to Allow. This milestone requires a real member account and an authorized room; the existing `/demo/...` route remains fictional and does not request microphone access.
+
+## Vercel Preview configuration contract
+The current source expects exactly these two browser-safe variables:
+
+```dotenv
+VITE_SUPABASE_URL=https://zwuddcotycuzflixprjv.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_<enabled-public-key>
+```
+
+`VITE_SUPABASE_KEY` and `VITE_SUPABASE_ANON_KEY` are not source configuration names. The publishable key is safe to expose in a Vite client bundle; authorization remains enforced by Supabase Auth, RLS, and trusted RPCs. The connected Vercel Preview environment must be redeployed after changing these variables. Auth fields remain editable while configuration is missing so users can see validation/configuration feedback instead of encountering untypable disabled inputs.

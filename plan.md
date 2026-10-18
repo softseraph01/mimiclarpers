@@ -63,7 +63,7 @@ Not included or claimed: real accounts or authorization, actual public/private a
 └── TODO.md                          # Created after plan approval
 ```
 
-The active `localDemoRoomService` implements the shared asynchronous `RoomService`; the active `localDemoTimelineEditor` implements a pure local editing contract. The UI calls those contracts rather than the concrete demo implementations. Authentication, project persistence, media uploads, recording, database-backed timeline persistence, and rendering remain interfaces only, with no fabricated working adapters. A future Supabase client will use only `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the browser; values are supplied through deployment environment settings, never committed to source.
+The active `localDemoRoomService` implements the shared asynchronous `RoomService`; the active `localDemoTimelineEditor` implements a pure local editing contract. The UI calls those contracts rather than the concrete demo implementations. Authentication, project persistence, media uploads, recording, database-backed timeline persistence, and rendering remain interfaces only, with no fabricated working adapters. The Supabase client uses only `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the browser; values are supplied through deployment environment settings, never committed to source.
 
 ## Design direction
 

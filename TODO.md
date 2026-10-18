@@ -161,3 +161,9 @@ Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired
 - Upload the recorded Blob only after explicit user action; retain local preview and progress/error recovery.
 - Save clip start/end timestamps and track identity through trusted, membership-scoped operations; do not use Realtime for media bytes.
 - Verify with two accounts that non-members cannot read private media metadata or signed URLs, then expose saved clips in the persistent timeline.
+
+## Vercel Preview Supabase configuration and auth-form fix — implemented on fix branch
+- Source, `.env.example`, README, and plan now use exactly `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`; stale `VITE_SUPABASE_ANON_KEY` planning text was removed.
+- Vercel Preview has the existing DUBROOM Supabase URL and enabled public publishable key configured.
+- Email, password, and display-name fields remain typable when configuration is missing; only the submit action is blocked until the public configuration exists.
+- Pending verification: deploy this branch and confirm the live Preview has no configuration warning and accepts typing.
