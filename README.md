@@ -65,7 +65,7 @@ On an Android tablet, open the Supabase Dashboard, select project `zwuddcotycuzf
 - `https://<Vercel-Preview-domain>/auth`
 - `https://<verified-production-domain>/auth`
 
-Do not put a guessed production URL in the allow-list. The current fix Preview deployment is `https://mimiclarpers-ga2appfdr-larper5.vercel.app/auth`; add that exact URL after confirming the deployment you are testing. If a later Vercel deployment receives a different hostname, add that new exact `/auth` URL before requesting another signup.
+Do not put a guessed production URL in the allow-list. The current permanent-account Preview deployment is `https://mimiclarpers-fjktghxoe-larper5.vercel.app/auth`; add that exact URL if confirmation is enabled while testing this deployment. If a later Vercel deployment receives a different hostname, add that new exact `/auth` URL before requesting another signup.
 
 In **Authentication → Providers → Email**, keep **Email provider** enabled and turn **Confirm email** off (`mailer_autoconfirm=true`). This is a Supabase project setting, not a frontend environment variable; it cannot be verified or changed by this repository. Do not use a service-role key or create guest sessions. After changing it, create a fresh account and verify that signup returns directly to DUBROOM without an email click.
 
