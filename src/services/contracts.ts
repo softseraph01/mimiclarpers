@@ -1,4 +1,12 @@
-import type { DemoRoom, DialogueClip, RoomVisibility } from '../types/domain';
+import type {
+  DemoRoom,
+  DialogueClip,
+  PersistentProject,
+  PersistentRoom,
+  PersistentRoomMember,
+  PublicRoomSummary,
+  RoomVisibility,
+} from '../types/domain';
 
 export interface AuthUser {
   id: string;
@@ -17,7 +25,7 @@ export interface CreateRoomRequest {
   targetLanguage: string;
 }
 
-/** Shared async boundary for local demo and future remote room adapters. */
+/** Shared async boundary for the isolated browser-only sample flow. */
 export interface RoomService {
   createRoom(input: CreateRoomRequest): Promise<DemoRoom>;
   joinRoom(code: string): Promise<DemoRoom>;
@@ -25,10 +33,59 @@ export interface RoomService {
   listRooms(): Promise<DemoRoom[]>;
 }
 
+export interface CreatePersistentRoomRequest {
+  name: string;
+  description: string;
+  visibility: RoomVisibility;
+  targetLanguage: string;
+  maxMembers: number | null;
+}
+
+export interface CreatePersistentRoomResult {
+  room: PersistentRoom;
+  projectId: string;
+  inviteCode: string | null;
+  inviteExpiresAt: string | null;
+}
+
+export interface JoinRoomResult {
+  roomId: string;
+  alreadyMember: boolean;
+}
+
+export interface RotateRoomInviteResult {
+  inviteCode: string;
+  expiresAt: string;
+}
+
+export interface UpdateRoomSettingsRequest {
+  roomId: string;
+  name: string;
+  description: string;
+  targetLanguage: string;
+  maxMembers: number | null;
+}
+
+/** Supabase-backed room and project operations. Every mutation is a trusted database RPC. */
+export interface CollaborativeRoomService {
+  createRoom(input: CreatePersistentRoomRequest): Promise<CreatePersistentRoomResult>;
+  joinPublicRoom(roomId: string): Promise<JoinRoomResult>;
+  joinPrivateRoom(inviteCode: string): Promise<JoinRoomResult>;
+  getRoom(roomId: string): Promise<PersistentRoom | null>;
+  getMyMembership(roomId: string, userId: string): Promise<PersistentRoomMember | null>;
+  listMyRooms(userId: string): Promise<PersistentRoom[]>;
+  listPublicRooms(): Promise<PublicRoomSummary[]>;
+  listMembers(roomId: string): Promise<PersistentRoomMember[]>;
+  getProject(roomId: string): Promise<PersistentProject | null>;
+  rotateInvite(roomId: string): Promise<RotateRoomInviteResult>;
+  updateRoomSettings(input: UpdateRoomSettingsRequest): Promise<void>;
+  transferOwnership(roomId: string, nextOwnerId: string): Promise<void>;
+  leaveRoom(roomId: string): Promise<void>;
+}
+
 export interface ProjectSummary {
   id: string;
   name: string;
-  ownerId: string;
   roomId: string | null;
   updatedAt: string;
 }
@@ -81,6 +138,3 @@ export interface ExportService {
   requestMixedAudioExport(projectId: string): Promise<ExportJob>;
   getExportJob(jobId: string): Promise<ExportJob>;
 }
-
-// Auth, project persistence, uploads, recording, timeline persistence, and export are future
-// boundaries only. Phase 1 instantiates the local room adapter and pure local timeline editor.

@@ -55,7 +55,7 @@ export default function LobbyPage() {
           <p className="lobby-description">A shared table for trying new voices on this scene. Pick a character, warm up, and find the moment together.</p>
           <div className="room-meta-row"><span className="meta-chip"><Globe2 size={14} /> {room.targetLanguage} dub</span><span className="meta-chip">{room.visibility === 'public' ? <Globe2 size={14} /> : <LockKeyhole size={14} />} {room.visibility}</span><span className="meta-chip"><Clapperboard size={14} /> 1 scene</span></div>
           {room.visibility === 'private' && <p className="field-hint field-hint--lobby">Visibility is only a demo label here; this lobby has no authentication or access control.</p>}
-          <div className="lobby-hero__actions"><button className="button button--primary" onClick={() => navigate(`/studio/${room.id}`)}><Play size={15} fill="currentColor" /> Enter studio <ArrowRight size={16} /></button><button className="button button--quiet" onClick={copyRoomCode}>{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? 'Code copied' : `Copy ${room.code}`}</button></div>
+          <div className="lobby-hero__actions"><button className="button button--primary" onClick={() => navigate(`/demo/studio/${room.id}`)}><Play size={15} fill="currentColor" /> Enter studio <ArrowRight size={16} /></button><button className="button button--quiet" onClick={copyRoomCode}>{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? 'Code copied' : `Copy ${room.code}`}</button></div>
         </div>
       </section>
 
