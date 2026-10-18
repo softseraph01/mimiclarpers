@@ -94,13 +94,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signUp = useCallback(async (email: string, password: string, displayName: string, returnTo: string) => {
     if (!supabase) throw new Error('Supabase is not configured for this build.');
-    const redirectTo = `${window.location.origin}/auth?confirmed=1&next=${encodeURIComponent(returnTo)}`;
+    // Keep the callback origin/path stable so it can be allow-listed exactly in
+    // Supabase Auth URL Configuration. The requested destination is safe UI
+    // state, not a second callback URL.
+    const redirectUrl = new URL('/auth', window.location.origin);
+    redirectUrl.searchParams.set('next', returnTo);
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
         data: { display_name: displayName.trim() },
-        emailRedirectTo: redirectTo,
+        emailRedirectTo: redirectUrl.toString(),
       },
     });
     if (error) throw error;

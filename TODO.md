@@ -147,3 +147,17 @@ Acceptance criteria from the request:
 - “Stop before Phase 3.”
 
 Evidence/remaining: final `pnpm check`, `pnpm build`, staged `git diff --check`, and PostgreSQL grammar parsing of all three migrations pass. The route manifest returns HTTP 200 with nine valid routes. Supabase readback confirms all five app tables have RLS, the owner-ID direct SELECT grants are absent, presence lease RPC execute grants are authenticated-only, and `room_presence` is in the Realtime publication. The auth form's empty-submit validation and unauthenticated `/profile` redirect were browser-tested; `/rooms` returned the actual empty Supabase list; responsive DUBROOM pages were previously inspected at 1280px/768px/390px. The review branch is pushed. The project owner confirmed the Dashboard **Allow public access** setting is OFF; our browser remained at sign-in, so this is owner-confirmed rather than independently observed. Two-account auth, authorization, room mutation, and Presence tests remain open because no test accounts were created. Vercel Preview/Production remains unavailable and unverified. Phase 3 has not started.
+
+## Phase 3.1 browser microphone capture MVP — implemented on continuation branch
+Acceptance criteria:
+- A signed-in member can open a real persistent room studio and start/stop a browser microphone recording with explicit permission handling.
+- The take can be previewed in-browser and downloaded from the Android-friendly studio UI.
+- The interface clearly identifies this as a local browser-only take and does not claim durable upload, synchronization, character-track persistence, or rendering.
+- The retro-futuristic/glassmorphism visual system and existing room/studio navigation remain intact.
+Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired into `PersistentStudioPage.tsx`, and styled in `src/styles/redesign.css`. Automated typecheck/build and a browser smoke test remain to be run on this continuation branch.
+
+## Phase 3.2 private media storage and timestamped dialogue clips — open
+- Add an additive migration for private project media metadata, authorized Supabase Storage policies, character/participant track records, and versioned dialogue clip rows.
+- Upload the recorded Blob only after explicit user action; retain local preview and progress/error recovery.
+- Save clip start/end timestamps and track identity through trusted, membership-scoped operations; do not use Realtime for media bytes.
+- Verify with two accounts that non-members cannot read private media metadata or signed URLs, then expose saved clips in the persistent timeline.

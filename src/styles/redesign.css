@@ -377,6 +377,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .live-timeline-empty__wave { width: 41px; height: 41px; display: grid; place-items: center; border: 1px solid rgba(139,92,246,.24); border-radius: 12px; color: var(--lavender); background: rgba(139,92,246,.1); }
 .live-timeline-empty strong { color: var(--text-soft); font-size: 11px; }
 .live-timeline-empty p { max-width: 430px; margin: 0; color: var(--text-dim); font-size: 9px; line-height: 1.55; }
+.recorder-card { margin-top: 12px; padding: 16px; border: 1px solid rgba(255,122,144,.24); border-radius: 14px; background: linear-gradient(120deg,rgba(255,122,144,.08),rgba(139,92,246,.045)); box-shadow: inset 0 1px rgba(255,255,255,.06); }
+.recorder-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.recorder-card h3 { margin: 5px 0 0; color: var(--text); font: 600 17px var(--display); }
+.recorder-card__copy { max-width: 640px; margin: 7px 0 14px; color: var(--text-soft); font-size: 10px; line-height: 1.55; }
+.recorder-led { display: inline-flex; align-items: center; gap: 6px; color: var(--text-dim); font: 8px var(--mono); letter-spacing: .08em; }
+.recorder-led.is-live { color: var(--coral); }
+.recorder-led.is-live .status-dot { background: var(--coral); box-shadow: 0 0 10px rgba(255,122,144,.8); }
+.recorder-card .field-label { max-width: 340px; }
+.recorder-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.button--record { min-height: 44px; border: 1px solid rgba(255,122,144,.55); border-radius: 9px; color: #fff0f2; background: linear-gradient(135deg,rgba(196,73,105,.95),rgba(139,62,115,.95)); box-shadow: 0 8px 22px rgba(255,122,144,.13); }
+.button--record:hover:not(:disabled) { border-color: var(--coral); transform: translateY(-1px); }
+.button--record.is-recording { background: linear-gradient(135deg,rgba(155,39,75,.98),rgba(103,35,94,.98)); }
+.recorded-clip { display: flex; align-items: center; gap: 10px; margin-top: 15px; padding: 10px; border: 1px solid rgba(85,231,242,.24); border-radius: 10px; background: rgba(8,14,30,.45); }
+.recorded-clip__icon { width: 34px; height: 34px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 9px; color: var(--cyan); background: rgba(85,231,242,.1); }
+.recorded-clip__body { min-width: 0; display: flex; flex: 1; flex-direction: column; gap: 4px; }
+.recorded-clip__body strong { overflow: hidden; color: var(--text); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.recorded-clip__body span { color: var(--text-dim); font: 8px var(--mono); }
+.recorded-clip audio { width: 100%; height: 30px; margin-top: 2px; }
 
 .empty-state { border: 1px solid var(--line-soft); border-radius: 15px; background: var(--panel); box-shadow: var(--shadow-glass); }
 .empty-state h1, .empty-state h2 { color: var(--text); font-family: var(--display); }

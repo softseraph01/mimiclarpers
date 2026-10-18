@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ArrowLeft, ArrowRight, AudioLines, Clapperboard, Download, Mic2, Play, Upload, Waves } from 'lucide-react';
+import { ArrowLeft, ArrowRight, AudioLines, Clapperboard, Download, Play, Upload, Waves } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { supabaseRoomService } from '../../services/supabaseRooms';
 import type { PersistentProject, PersistentRoom } from '../../types/domain';
+import LocalRecorder from './LocalRecorder';
 
 export default function PersistentStudioPage() {
   const { roomId = '' } = useParams();
@@ -64,15 +65,16 @@ export default function PersistentStudioPage() {
     <header className="studio-heading"><div><div className="studio-title-row"><h1>{room.name}</h1></div><p><span className="scene-chip"><Clapperboard size={13} /> {project?.title ?? 'Room project'}</span><span className="heading-divider" /><span>{room.targetLanguage} dub</span><span className="heading-divider" /><span>Persistent project</span></p></div><div className="studio-heading__actions"><Link className="button button--quiet button--small" to={`/demo/studio/scene-042`}><Waves size={14} /> Open sample timeline</Link><button className="button button--export button--small" type="button" disabled title="A real video export is not implemented in Phase 2"><Download size={15} /> Export <span className="coming-soon-label">LATER</span></button></div></header>
     {error && <p className="form-error" role="alert">{error}</p>}
     {!isMember && room.visibility === 'public' ? <section className="panel join-required-panel"><span className="panel-icon panel-icon--cyan"><Clapperboard size={19} /></span><h2>Join the room to enter its studio</h2><p>Public room details are visible, but project details are protected until you become a member.</p><button className="button button--primary" type="button" onClick={() => void joinRoom()} disabled={busy}>{busy ? 'Joining…' : 'Join this public room'} <ArrowRight size={16} /></button></section> : !isMember ? <section className="panel join-required-panel"><span className="panel-icon panel-icon--violet"><Clapperboard size={19} /></span><h2>Membership required</h2><p>Only room members can open a private project. Use the owner’s invitation link to join.</p><Link className="button button--quiet" to="/">Back to workspace</Link></section> : <>
-      <section className="studio-notice"><span className="notice-mark"><Waves size={15} /></span><p><strong>Phase 2 project foundation.</strong> This room and project are saved. Video storage, browser recording, real dialogue clips, collaborative timeline editing, and rendering are later work and are not available yet.</p></section>
+      <section className="studio-notice"><span className="notice-mark"><Waves size={15} /></span><p><strong>Phase 3 capture milestone.</strong> Room and project metadata are saved, and this browser can now capture a local voice take. Storage uploads, durable clip records, collaborative editing, and rendering remain separate milestones.</p></section>
       <section className="scene-stage panel">
         <div className="scene-stage__toolbar"><span className="eyebrow">SCENE PREVIEW</span><span className="scene-stage__toolbar-right"><span>PROJECT <b>{project?.id.slice(0, 8).toUpperCase() ?? 'PENDING'}</b></span></span></div>
         <div className="scene-canvas live-scene-canvas"><div className="live-scene-orbit" aria-hidden="true" /><span className="live-scene-icon"><Clapperboard size={28} /></span><strong>No scene media yet</strong><span>Uploads are intentionally not enabled in this phase.</span></div>
         <div className="scene-stage__controls"><button className="play-button" type="button" disabled aria-label="Playback unavailable"><Play size={16} fill="currentColor" /></button><span className="playback-time">00:00:00 <span>/ —</span></span><input className="playback-scrubber" type="range" min={0} max={1} value={0} readOnly aria-label="Playback is unavailable until media is added" /><span className="scene-aspect">NO MEDIA <span>YET</span></span></div>
       </section>
+      <LocalRecorder />
       <section className="timeline-panel panel live-timeline-panel">
-        <div className="timeline-panel__header"><div className="timeline-heading"><span className="panel-icon panel-icon--cyan"><AudioLines size={17} /></span><div><h2>Dialogue timeline</h2><p>Persistent clip records are a later phase.</p></div></div><div className="timeline-actions"><button className="button button--quiet button--small" type="button" disabled title="Media uploads are not implemented yet"><Upload size={14} /> Upload video</button><button className="button button--quiet button--small" type="button" disabled title="Microphone recording is not implemented yet"><Mic2 size={14} /> Record <span className="coming-soon-label">LATER</span></button></div></div>
-        <div className="live-timeline-empty"><span className="live-timeline-empty__wave"><AudioLines size={20} /></span><strong>No dialogue clips have been recorded</strong><p>The sample timeline remains available in the separate demo studio. Real recording, storage, and timestamped clips are not connected here.</p></div>
+        <div className="timeline-panel__header"><div className="timeline-heading"><span className="panel-icon panel-icon--cyan"><AudioLines size={17} /></span><div><h2>Dialogue timeline</h2><p>Saved clip records and character tracks are the next persistence milestone.</p></div></div><div className="timeline-actions"><button className="button button--quiet button--small" type="button" disabled title="Media uploads are not implemented yet"><Upload size={14} /> Upload video</button><span className="coming-soon-label">TIMELINE LATER</span></div></div>
+        <div className="live-timeline-empty"><span className="live-timeline-empty__wave"><AudioLines size={20} /></span><strong>No saved dialogue clips yet</strong><p>Your local take can be previewed or downloaded above. The next step will upload it to private storage and create an authorized, timestamped clip record.</p></div>
         <div className="timeline-footer"><span><span className="status-dot" /> Saved project · no media yet</span><span>Editing and export are not available</span></div>
       </section>
     </>}
