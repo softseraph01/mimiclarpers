@@ -1,6 +1,6 @@
 # MIMICLARPERS / DUBROOM — Delivery Outcomes
 
-Status reflects delivered and verified behavior only. Phase 1 is complete. Phase 2 code and database foundations are present, but authenticated account-to-account behavior, private Realtime isolation, and Vercel deployment remain unverified. Phase 2 excludes recording, media uploads, synchronized timeline editing, and video export.
+Status reflects delivered and verified behavior only. Phase 1 is complete. Phase 2 code and database foundations are present, but authenticated account-to-account behavior, private Realtime isolation, and Vercel deployment remain unverified. Phase 3.1 now provides a local scene/upload, participant-track, playback, and browser-recording MVP; private media persistence, synchronized timeline editing, and video export remain open.
 
 ## Phase 1 responsive demo interface — complete
 
@@ -154,7 +154,7 @@ Acceptance criteria:
 - The take can be previewed in-browser and downloaded from the Android-friendly studio UI.
 - The interface clearly identifies this as a local browser-only take and does not claim durable upload, synchronization, character-track persistence, or rendering.
 - The retro-futuristic/glassmorphism visual system and existing room/studio navigation remain intact.
-Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired into `PersistentStudioPage.tsx`, and styled in `src/styles/redesign.css`. Automated typecheck/build and a browser smoke test remain to be run on this continuation branch.
+Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired into `PersistentStudioPage.tsx`, and styled in `src/styles/redesign.css`. Automated typecheck/build pass; authenticated Android/browser interaction and two-account collaboration remain to be tested.
 
 ## Phase 3.2 private media storage and timestamped dialogue clips — open
 - Add an additive migration for private project media metadata, authorized Supabase Storage policies, character/participant track records, and versioned dialogue clip rows.
