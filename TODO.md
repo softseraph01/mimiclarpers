@@ -173,3 +173,10 @@ Evidence: implementation added in `src/features/studio/LocalRecorder.tsx`, wired
 - Added `supabase/templates/confirm-signup.html`; the hosted Confirm signup template must use `{{ .ConfirmationURL }}` so Supabase preserves the requested `emailRedirectTo` destination. Do not use `{{ .SiteURL }}` or a hardcoded localhost URL.
 - The exact current Preview callback to allow-list is `https://mimiclarpers-ga2appfdr-larper5.vercel.app/auth`; a new deployment hostname must be allow-listed before testing that deployment.
 - The Supabase connector does not expose hosted Auth URL/template settings, and no fresh confirmation email was available to click in this session. Do not claim the redirect is fixed until a newly generated link returns to the Vercel Preview `/auth` route.
+
+## Permanent email/password accounts — implementation branch
+- Registration now collects `username`, `email`, and `password`; username is stored in the existing `profiles.display_name` field so room/project/recording ownership remains keyed by the Supabase user UUID.
+- Added the additive `is_username_available` RPC and a race-safe profile trigger. Existing duplicate legacy names were preserved; new conflicting inserts/updates are rejected without changing RLS or the profiles/rooms/room_members schema.
+- When Supabase email confirmation is disabled, `signUp` persists the returned session and navigates immediately. The callback path remains intact for projects where confirmation is still enabled.
+- Duplicate email, duplicate username, invalid credentials, invalid email, and generic Auth errors receive clear UI messages.
+- The actual Supabase `mailer_autoconfirm` project setting is not exposed by the provided connector and is not claimed as disabled. Manually set **Authentication → Providers → Email → Confirm email** off, then test a fresh signup and returning sign-in on the deployed Preview.

@@ -105,6 +105,10 @@ export type Database = {
           created_at: string;
         }[];
       };
+      is_username_available: {
+        Args: { p_username: string };
+        Returns: boolean;
+      };
       create_room: {
         Args: {
           p_name: string;

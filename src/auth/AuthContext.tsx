@@ -12,7 +12,7 @@ type AuthContextValue = {
   profileLoading: boolean;
   authNotice: string;
   signIn(email: string, password: string): Promise<void>;
-  signUp(email: string, password: string, displayName: string, returnTo: string): Promise<{ requiresConfirmation: boolean }>;
+  signUp(email: string, password: string, username: string, returnTo: string): Promise<{ requiresConfirmation: boolean }>;
   signOut(): Promise<void>;
   updateDisplayName(displayName: string): Promise<void>;
 };
@@ -100,13 +100,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw error;
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, displayName: string, returnTo: string) => {
+  const signUp = useCallback(async (email: string, password: string, username: string, returnTo: string) => {
     if (!supabase) throw new Error('Supabase is not configured for this build.');
+    const normalizedUsername = username.trim();
+    const { data: usernameAvailable, error: usernameAvailabilityError } = await supabase.rpc('is_username_available', {
+      p_username: normalizedUsername,
+    });
+    if (usernameAvailabilityError) throw usernameAvailabilityError;
+    if (!usernameAvailable) throw new Error('Username is already in use.');
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
       options: {
-        data: { display_name: displayName.trim() },
+        data: { display_name: normalizedUsername, username: normalizedUsername },
         // Keep the callback origin/path stable so it can be allow-listed exactly
         // in Supabase Auth URL Configuration. The requested destination is safe
         // UI state, not a second callback URL.
@@ -114,6 +120,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
     if (error) throw error;
+    if (data.user?.identities?.length === 0) {
+      throw new Error('An account with this email already exists. Sign in instead.');
+    }
+    if (data.session) setSession(data.session);
     return { requiresConfirmation: !data.session };
   }, []);
 

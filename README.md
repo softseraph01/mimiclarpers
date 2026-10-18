@@ -56,7 +56,7 @@ The development server uses port `3000`. `.env.local` is ignored by Git. The pub
 
 ## Authentication and redirect setup
 
-The project currently allows email signup, enables email/password auth, and requires email confirmation (`mailer_autoconfirm=false`). A user must confirm the message before signing in when Supabase returns no active session. The app preserves a safe same-site return path through that confirmation link.
+The project uses permanent Supabase email/password accounts. Registration collects a username, email, and password; the existing `profiles.display_name` column stores the username so the existing profile, room, project, recording, and RLS relationships remain keyed by the Supabase user ID. When Supabase email confirmation is disabled, `signUp` returns a session and the app enters the requested destination immediately. The callback path remains available for projects where confirmation is still enabled.
 
 On an Android tablet, open the Supabase Dashboard, select project `zwuddcotycuzflixprjv`, then open **Authentication → URL Configuration**. Set the Site URL to the actual production origin only when you have confirmed it, and add the exact `/auth` callback for every origin where signup will be tested, for example:
 
@@ -66,6 +66,8 @@ On an Android tablet, open the Supabase Dashboard, select project `zwuddcotycuzf
 - `https://<verified-production-domain>/auth`
 
 Do not put a guessed production URL in the allow-list. The current fix Preview deployment is `https://mimiclarpers-ga2appfdr-larper5.vercel.app/auth`; add that exact URL after confirming the deployment you are testing. If a later Vercel deployment receives a different hostname, add that new exact `/auth` URL before requesting another signup.
+
+In **Authentication → Providers → Email**, keep **Email provider** enabled and turn **Confirm email** off (`mailer_autoconfirm=true`). This is a Supabase project setting, not a frontend environment variable; it cannot be verified or changed by this repository. Do not use a service-role key or create guest sessions. After changing it, create a fresh account and verify that signup returns directly to DUBROOM without an email click.
 
 In **Authentication → Email Templates → Confirm signup**, use the hosted template source in [`supabase/templates/confirm-signup.html`](supabase/templates/confirm-signup.html). The confirmation button must use `{{ .ConfirmationURL }}`. Do not hardcode `http://localhost:3000`, `{{ .SiteURL }}`, or a guessed Vercel URL in the button: `{{ .ConfirmationURL }}` contains Supabase's verification endpoint and the `emailRedirectTo` destination generated from the current browser origin. This keeps the token verification flow in Supabase while returning the user to `/auth` on the same deployed origin.
 

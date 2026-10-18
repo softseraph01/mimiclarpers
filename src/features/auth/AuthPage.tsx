@@ -12,9 +12,27 @@ function safeNextPath(candidate: string | null) {
   return candidate;
 }
 
+function authErrorMessage(cause: unknown, mode: Mode) {
+  const message = cause instanceof Error ? cause.message : 'Authentication did not complete. Please try again.';
+  const normalized = message.toLowerCase();
+  if (normalized.includes('username is already in use') || normalized.includes('duplicate key') || normalized.includes('database error saving new user')) {
+    return 'That username is already in use. Choose a different username.';
+  }
+  if (normalized.includes('already registered') || normalized.includes('already exists') || normalized.includes('identities')) {
+    return 'An account with this email already exists. Sign in instead.';
+  }
+  if (mode === 'sign-in' && normalized.includes('invalid login credentials')) {
+    return 'The email or password is incorrect.';
+  }
+  if (normalized.includes('email') && normalized.includes('invalid')) {
+    return 'Enter a valid email address.';
+  }
+  return message;
+}
+
 export default function AuthPage() {
   const [mode, setMode] = useState<Mode>('sign-in');
-  const [displayName, setDisplayName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -44,8 +62,8 @@ export default function AuthPage() {
       setError('Use a password with at least 8 characters.');
       return;
     }
-    if (mode === 'sign-up' && displayName.trim().length < 2) {
-      setError('Your display name must be at least 2 characters.');
+    if (mode === 'sign-up' && username.trim().length < 2) {
+      setError('Your username must be at least 2 characters.');
       return;
     }
 
@@ -55,7 +73,7 @@ export default function AuthPage() {
         await signIn(normalizedEmail, password);
         navigate(nextPath, { replace: true });
       } else {
-        const result = await signUp(normalizedEmail, password, displayName, nextPath);
+        const result = await signUp(normalizedEmail, password, username, nextPath);
         if (result.requiresConfirmation) {
           setNotice('Account created. Check your inbox for a confirmation link, then sign in here; your requested destination will be preserved.');
         } else {
@@ -63,7 +81,7 @@ export default function AuthPage() {
         }
       }
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Authentication did not complete. Please try again.');
+      setError(authErrorMessage(cause, mode));
     } finally {
       setBusy(false);
     }
@@ -96,7 +114,7 @@ export default function AuthPage() {
         </div>
 
         <form className="auth-form" onSubmit={submit} noValidate>
-          {mode === 'sign-up' && <label className="field-label" htmlFor="auth-display-name">Display name<input id="auth-display-name" autoComplete="name" className="text-input" value={displayName} onChange={(event) => setDisplayName(event.target.value)} maxLength={48} placeholder="How your cast sees you" disabled={busy} /></label>}
+          {mode === 'sign-up' && <label className="field-label" htmlFor="auth-username">Username<input id="auth-username" autoComplete="username" className="text-input" value={username} onChange={(event) => setUsername(event.target.value)} maxLength={48} placeholder="How your cast sees you" disabled={busy} /></label>}
           <label className="field-label" htmlFor="auth-email">Email address<span className="input-icon-wrap"><Mail size={16} /><input id="auth-email" type="email" autoComplete="email" className="text-input" value={email} onChange={(event) => setEmail(event.target.value)} maxLength={254} placeholder="you@example.com" disabled={busy} /></span></label>
           <label className="field-label" htmlFor="auth-password">Password<span className="input-icon-wrap"><LockKeyhole size={16} /><input id="auth-password" type={showPassword ? 'text' : 'password'} autoComplete={mode === 'sign-in' ? 'current-password' : 'new-password'} className="text-input" value={password} onChange={(event) => setPassword(event.target.value)} maxLength={128} placeholder="At least 8 characters" disabled={busy} /><button className="password-toggle" type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword((visible) => !visible)} disabled={busy}>{showPassword ? <EyeOff size={17} /> : <Eye size={17} />}</button></span></label>
           {error && <p className="form-error" role="alert">{error}</p>}
