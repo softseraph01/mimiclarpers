@@ -1,4 +1,4 @@
-/* DUBROOM · retro-futurist audiovisual workstation */
+/* MIMICLARPERS · retro-futurist audiovisual workstation */
 :root {
   color-scheme: dark;
   --bg: #101326;
@@ -52,13 +52,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid rgba(85,231,242,.3); border-radius: 11px 11px 11px 3px; color: var(--cyan); background: linear-gradient(145deg,rgba(85,231,242,.15),rgba(139,92,246,.19)); box-shadow: 0 0 23px rgba(85,231,242,.12), inset 0 1px rgba(255,255,255,.1); }
 .brand-mark svg { width: 23px; height: 23px; }
 .brand-mark--large { width: 42px; height: 42px; }
-.brand-word { color: #f7f3ff; font: 700 16px var(--display); letter-spacing: .095em; white-space: nowrap; }
+.brand-word { color: #f7f3ff; font: 700 13px var(--display); letter-spacing: .075em; white-space: nowrap; }
 .brand-word > span { color: var(--cyan); }
 .topnav { display: flex; align-items: center; gap: 8px; }
+.topnav__group { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; }
 .topnav__link { min-height: 44px; display: inline-flex; align-items: center; gap: 8px; padding: 0 13px; border: 1px solid transparent; border-radius: 10px; color: var(--text-soft); font-size: 12px; transition: color .16s, border-color .16s, background .16s; }
 .topnav__link svg { color: var(--text-dim); }
 .topnav__link:hover, .topnav__link.is-active { color: var(--text); border-color: var(--line-soft); background: rgba(255,255,255,.045); }
 .topnav__link.is-active svg { color: var(--cyan); }
+.dev-follow-link { display: inline-flex; align-items: center; gap: 4px; padding: 0 13px; color: var(--text-dim); font: 7px var(--mono); letter-spacing: .02em; white-space: nowrap; transition: color .16s; }
+.dev-follow-link svg { color: var(--cyan); }
+.dev-follow-link:hover { color: var(--text-soft); }
 .topbar__right { display: flex; align-items: center; gap: 11px; margin-left: auto; }
 .environment-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid rgba(199,184,255,.2); border-radius: 99px; color: var(--lavender); background: rgba(139,92,246,.095); font: 8px var(--mono); letter-spacing: .05em; white-space: nowrap; }
 .user-chip { min-height: 44px; display: inline-flex; align-items: center; gap: 9px; padding: 3px 10px 3px 4px; border: 1px solid var(--line-soft); border-radius: 99px; color: var(--text-soft); background: rgba(255,255,255,.04); font-size: 11px; }
@@ -346,6 +350,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .studio-notice p { color: var(--text-soft); font-size: 10px; }
 .studio-notice p strong { color: #d9faff; }
 .scene-stage, .timeline-panel, .clip-editor { border-color: rgba(214,205,255,.16); border-radius: 14px; }
+.scene-export-actions { display: inline-flex; align-items: center; gap: 6px; }
+.scene-export-actions .button { min-height: 36px; padding: 0 9px; font-size: 8px; }
+.scene-export-actions .button svg { width: 13px; height: 13px; }
+
 .scene-canvas { border-color: rgba(199,184,255,.18); border-radius: 11px; }
 .timeline-scroll { border-color: rgba(199,184,255,.15); background: rgba(9,11,28,.55); }
 .timeline-grid { --line-soft: rgba(214,205,255,.12); }
@@ -406,10 +414,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .topbar { height: 60px; gap: 13px; padding: 0 14px; }
   .brand { min-width: auto; gap: 7px; }
   .brand-mark { width: 31px; height: 31px; }
-  .brand-word { font-size: 13px; }
+  .brand-word { font-size: 11px; letter-spacing: .055em; }
   .topnav { gap: 3px; }
   .topnav__link { min-width: 44px; justify-content: center; padding: 0 8px; font-size: 0; }
   .topnav__link svg { width: 18px; height: 18px; }
+  .topnav__group { align-items: center; }
+  .dev-follow-link { padding: 0 4px; font-size: 6px; }
   .environment-pill { padding: 6px 7px; font-size: 7px; }
   .user-chip { width: 44px; justify-content: center; padding: 3px; }
   .user-chip > span:last-child { display: none; }
@@ -437,13 +447,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 }
 @media (max-width: 520px) {
       .topbar { gap: 8px; padding: 0 10px; }
-  .brand-word { font-size: 11px; letter-spacing: .06em; }
+  .brand-word { font-size: 9px; letter-spacing: .045em; }
   .brand-mark { width: 29px; height: 29px; }
   .topbar__right { gap: 5px; }
   .environment-pill { gap: 4px; padding: 6px; font-size: 0; }
   .environment-pill svg { width: 15px; height: 15px; }
   .topnav { gap: 0; }
   .topnav__link { min-width: 42px; }
+  .dev-follow-link { max-width: 76px; overflow: hidden; text-overflow: ellipsis; }
   .page-view { padding: 18px 12px 32px; }
   .updated-note { max-width: 145px; font-size: 7px; text-align: right; }
   .dashboard-hero__copy > p { font-size: 11px; }
@@ -459,6 +470,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .lobby-hero__actions { align-items: stretch; }
   .lobby-hero__actions .button { flex: 1 1 auto; }
   .presence-note { font-size: 9px; line-height: 1.45; }
+  .scene-stage__toolbar { align-items: flex-start; flex-direction: column; }
+  .scene-stage__toolbar-right { width: 100%; justify-content: space-between; }
+  .scene-export-actions { width: 100%; flex-wrap: wrap; }
+  .scene-export-actions .button { flex: 1; }
   .studio-topline { align-items: flex-start; }
   .studio-status { flex-direction: column-reverse; align-items: flex-end; gap: 5px; }
   .studio-status__sync { font-size: 7px; }

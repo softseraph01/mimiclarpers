@@ -159,7 +159,7 @@ export default function DashboardPage() {
         </div>
         <div className="hero-art" aria-label="Illustration of a retro-futurist screening room">
           <div className="hero-art__topline"><span className="record-dot" /> ROOM 01 <span className="hero-art__mono">LIVE CALL-SHEET</span></div>
-          <div className="hero-art__frame"><div className="hero-art__moon" /><div className="hero-art__horizon" /><div className="hero-art__platform" /><div className="hero-art__train"><span /><span /><span /></div><div className="hero-art__caption">EVERY SCENE HAS ANOTHER SIDE <span>— DUBROOM</span></div></div>
+          <div className="hero-art__frame"><div className="hero-art__moon" /><div className="hero-art__horizon" /><div className="hero-art__platform" /><div className="hero-art__train"><span /><span /><span /></div><div className="hero-art__caption">EVERY SCENE HAS ANOTHER SIDE <span>— MIMICLARPERS</span></div></div>
           <div className="hero-art__wave" aria-hidden="true">{Array.from({ length: 36 }, (_, index) => <span key={index} style={{ height: `${14 + ((index * 19 + 23) % 75)}%` }} />)}</div>
           <div className="hero-art__bottom"><span><span className="status-dot" /> YOUR ROOMS ARE PERSISTENT</span><span>ON AIR</span></div>
         </div>

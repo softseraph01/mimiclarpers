@@ -53,20 +53,19 @@ function AppShell({ demo = false }: { demo?: boolean }) {
   return <div className={`app-frame${demo ? ' app-frame--demo' : ''}`}>
     <div className="ambient-backdrop" aria-hidden="true"><span /><span /><span /></div>
     <header className="topbar">
-      <Link className="brand" to={user ? '/' : '/rooms'} aria-label="DUBROOM workspace"><span className="brand-mark"><BrandMark /></span><span className="brand-word">DUB<span>ROOM</span></span></Link>
+      <Link className="brand" to={user ? '/' : '/rooms'} aria-label="MIMICLARPERS workspace"><span className="brand-mark"><BrandMark /></span><span className="brand-word">MIMICLARPERS</span></Link>
       <nav className="topnav" aria-label="Main navigation">
-        {user && <NavLink to="/" end className={({ isActive }) => `topnav__link${isActive ? ' is-active' : ''}`}><Home size={16} /> Workspace</NavLink>}
+        {user && <div className="topnav__group"><NavLink to="/" end className={({ isActive }) => `topnav__link${isActive ? ' is-active' : ''}`}><Home size={16} /> Workspace</NavLink><a className="dev-follow-link" href="https://www.instagram.com/btw_beast07/" target="_blank" rel="noreferrer"><span>Follow the developer ❤️</span><Instagram size={12} aria-hidden="true" /></a></div>}
         <NavLink to="/rooms" className={({ isActive }) => `topnav__link${isActive ? ' is-active' : ''}`}><Compass size={16} /> Public rooms</NavLink>
       </nav>
       <div className="topbar__right">
-        <a className="environment-pill" href="https://www.instagram.com/btw_beast07/" target="_blank" rel="noreferrer" aria-label="Open developer Instagram profile"><Instagram size={13} /> DEV'S @</a>
         {user ? <><Link className="user-chip" to="/profile" aria-label={`Profile for ${displayName}`}><span className="avatar avatar--cyan">{initials}</span><span>{displayName}</span></Link><button className="sign-out-button" type="button" onClick={() => void leaveAccount()} disabled={signingOut} aria-label="Sign out"><LogOut size={16} /></button></> : <Link className="button button--quiet button--small" to="/auth">Sign in <ArrowUpRight size={14} /></Link>}
       </div>
     </header>
     {authNotice && <div className="shell-error" role="status">{authNotice}</div>}
     {signOutError && <div className="shell-error" role="alert">{signOutError}</div>}
     <main className="page-view"><Outlet /></main>
-    <footer className="app-footer"><span>DUBROOM</span><span><a className="app-footer__social" href="https://www.instagram.com/btw_beast07/" target="_blank" rel="noreferrer"><Instagram size={13} /> Instagram · @btw_beast07</a></span></footer>
+    <footer className="app-footer"><span>MIMICLARPERS</span></footer>
   </div>;
 }
 
