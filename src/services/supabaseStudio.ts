@@ -96,11 +96,15 @@ export const supabaseStudioService = {
     const audioAssets = new Map(media.filter((asset) => asset.kind === 'audio').map((asset) => [asset.id, asset]));
     const [scene, ...clipUrls] = await Promise.all([
       sceneRow ? mapAsset(sceneRow) : Promise.resolve(null),
-      ...(clips ?? []).map(async (clip) => ({ clip, audioUrl: await signedUrl(audioAssets.get(clip.media_asset_id)?.object_path ?? '') })),
+      ...(clips ?? []).map(async (clip) => {
+        const audioAsset = audioAssets.get(clip.media_asset_id);
+        if (!audioAsset) return null;
+        return { clip, audioUrl: await signedUrl(audioAsset.object_path) };
+      }),
     ]);
     return {
       scene,
-      clips: clipUrls.map(({ clip, audioUrl }) => ({ ...clip, audioUrl })),
+      clips: clipUrls.flatMap((entry) => entry ? [{ ...entry.clip, audioUrl: entry.audioUrl }] : []),
       playbackPositionSeconds: Number(state?.playback_position_seconds ?? 0),
       revision: Number(state?.revision ?? 1),
     };

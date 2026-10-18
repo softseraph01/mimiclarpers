@@ -126,7 +126,7 @@ export const supabaseRoomService: CollaborativeRoomService = {
     if (membershipError) throw membershipError;
     const ids = (memberships ?? []).map((membership) => membership.room_id);
     if (ids.length === 0) return [];
-    const { data, error } = await client.from('rooms').select(roomColumns).in('id', ids).order('updated_at', { ascending: false });
+    const { data, error } = await client.from('rooms').select(roomColumns).in('id', ids).eq('status', 'open').order('updated_at', { ascending: false });
     if (error) throw error;
     return (data ?? []).map(mapRoom);
   },
@@ -207,6 +207,11 @@ export const supabaseRoomService: CollaborativeRoomService = {
 
   async leaveRoom(roomId: string): Promise<void> {
     const { error } = await getClient().rpc('leave_room', { p_room_id: roomId });
+    if (error) throw error;
+  },
+
+  async deleteRoom(roomId: string): Promise<void> {
+    const { error } = await getClient().rpc('delete_room', { p_room_id: roomId });
     if (error) throw error;
   },
 };

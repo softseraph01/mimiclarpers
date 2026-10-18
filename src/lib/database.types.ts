@@ -189,6 +189,10 @@ export type Database = {
         Args: { p_room_id: string };
         Returns: undefined;
       };
+      delete_room: {
+        Args: { p_room_id: string };
+        Returns: undefined;
+      };
       set_room_presence: {
         Args: { p_room_id: string; p_connection_id: string };
         Returns: undefined;

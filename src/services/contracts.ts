@@ -81,6 +81,7 @@ export interface CollaborativeRoomService {
   updateRoomSettings(input: UpdateRoomSettingsRequest): Promise<void>;
   transferOwnership(roomId: string, nextOwnerId: string): Promise<void>;
   leaveRoom(roomId: string): Promise<void>;
+  deleteRoom(roomId: string): Promise<void>;
 }
 
 export interface ProjectSummary {

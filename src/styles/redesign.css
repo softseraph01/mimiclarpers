@@ -595,3 +595,31 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .scene-upload h2 { font-size: 24px; }
   .studio-local-note { align-items: flex-start; }
 }
+
+
+/* Incremental studio interaction polish */
+.compact-recorder { display:flex; align-items:center; gap:12px; min-height:62px; padding:10px 14px; border:1px solid rgba(255,255,255,.12); border-radius:16px; background:linear-gradient(120deg,rgba(255,255,255,.08),rgba(19,17,40,.82)); box-shadow:0 12px 32px rgba(0,0,0,.18); }
+.compact-recorder__mic { display:grid; place-items:center; width:46px; height:46px; flex:0 0 46px; border:1px solid rgba(85,231,242,.45); border-radius:50%; color:#101326; background:#55e7f2; cursor:pointer; box-shadow:0 0 22px rgba(85,231,242,.2); }
+.compact-recorder__mic:hover,.compact-recorder__mic:focus-visible { transform:translateY(-1px); box-shadow:0 0 28px rgba(85,231,242,.38); }
+.compact-recorder.is-recording .compact-recorder__mic { color:#fff; background:#ff7a90; border-color:#ff7a90; box-shadow:0 0 26px rgba(255,122,144,.5); }
+.compact-recorder__status { display:grid; gap:3px; min-width:150px; }
+.compact-recorder__status strong { font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; }
+.compact-recorder__status span { color:var(--text-dim); font-size:.72rem; }
+.compact-recorder__live { margin-left:auto; color:#ff7a90; font:700 .68rem/1 monospace; letter-spacing:.12em; }
+.compact-recorder__live i { display:inline-block; width:7px; height:7px; margin-right:5px; border-radius:50%; background:#ff7a90; box-shadow:0 0 10px #ff7a90; animation:studio-pulse 1s ease-in-out infinite; }
+.compact-recorder__review { display:flex; align-items:center; gap:6px; margin-left:auto; }
+.compact-recorder__review audio { width:min(250px,32vw); height:30px; }
+.studio-record-toolbar { display:grid; gap:6px; margin:12px 0; }
+.studio-record-toolbar .studio-save-message { margin:0; }
+.track-mix-button { display:inline-grid; place-items:center; width:26px; height:26px; margin-left:auto; border:1px solid rgba(255,255,255,.12); border-radius:8px; color:var(--text-dim); background:rgba(255,255,255,.05); cursor:pointer; }
+.track-mix-button:hover,.track-mix-button:focus-visible { color:var(--cyan); border-color:rgba(85,231,242,.5); }
+.track-volume { width:62px; accent-color:var(--cyan); }
+.clip-block { touch-action:none; cursor:grab; }
+.clip-block:active { cursor:grabbing; }
+.clip-block.is-selected { z-index:3; box-shadow:0 0 0 2px rgba(255,255,255,.7),0 0 22px rgba(85,231,242,.28); }
+.room-list-item { display:flex; align-items:stretch; gap:8px; }
+.room-list-item__main { display:flex; align-items:center; gap:12px; min-width:0; flex:1; color:inherit; text-decoration:none; }
+.room-list-item__delete { display:grid; place-items:center; width:38px; flex:0 0 38px; margin:7px; border:1px solid rgba(255,122,144,.25); border-radius:10px; color:#ff9bac; background:rgba(255,122,144,.06); cursor:pointer; }
+.room-list-item__delete:hover,.room-list-item__delete:focus-visible { border-color:var(--coral); background:rgba(255,122,144,.16); }
+@keyframes studio-pulse { 50% { opacity:.35; transform:scale(.7); } }
+@media (max-width:700px) { .compact-recorder { flex-wrap:wrap; } .compact-recorder__review { width:100%; margin-left:58px; } .compact-recorder__review audio { flex:1; width:auto; } .track-volume { width:46px; } }

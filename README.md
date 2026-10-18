@@ -106,3 +106,11 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_<enabled-public-key>
 ```
 
 `VITE_SUPABASE_KEY` and `VITE_SUPABASE_ANON_KEY` are not source configuration names. The publishable key is safe to expose in a Vite client bundle; authorization remains enforced by Supabase Auth, RLS, and trusted RPCs. The connected Vercel Preview environment must be redeployed after changing these variables. Auth fields remain editable while configuration is missing so users can see validation/configuration feedback instead of encountering untypable disabled inputs.
+
+## Studio interaction milestone — BandLab-style editing and host room archive
+
+The current continuation adds a compact one-tap microphone control to the persistent studio. The first tap requests microphone permission and records at the shared playhead; the second tap stops recording. A take can be previewed, downloaded, discarded, or kept. Kept takes are then uploaded through the private Supabase Storage workflow and assigned to the authenticated participant's track. The local preview is not described as saved until the upload succeeds.
+
+The original scene audio is muted by default in dubbing mode and has a separate speaker control. This browser mute state does not alter the uploaded source file or determine a future export mix. Participant tracks have independent mute and volume controls, and saved clips can be selected and dragged horizontally on touch or pointer devices. Accessible zoom controls, the shared ruler/playhead, contextual split/delete controls, and persisted trim/move metadata remain available. Full conflict-aware collaborative editing and server-side export rendering are still open.
+
+Hosts now have a Delete room action on their dashboard room cards. The database-enforced `delete_room` RPC verifies the authenticated owner and archives the room, revokes its invitation, and hides it from active room lists without deleting the associated project or private media. Members do not receive the action, and backend authorization does not rely on the UI.

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { ArrowRight, ArrowUpRight, Check, Clapperboard, Copy, Globe2, LockKeyhole, Plus, Radio, Sparkles, UsersRound } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Clapperboard, Copy, Globe2, LockKeyhole, Plus, Radio, Sparkles, Trash2, UsersRound } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { demoLanguages } from '../../demo/seedData';
@@ -30,6 +30,7 @@ export default function DashboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdInvite, setCreatedInvite] = useState<{ room: PersistentRoom; code: string; expiresAt: string | null } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [deletingRoomId, setDeletingRoomId] = useState<string | null>(null);
 
   const targetLanguage = languageChoice === 'custom' ? customLanguage.trim() : languageChoice;
   const inviteUrl = useMemo(() => createdInvite ? `${window.location.origin}/join/${createdInvite.code}` : '', [createdInvite]);
@@ -131,6 +132,20 @@ export default function DashboardPage() {
     }
   }
 
+  async function deleteRoom(room: PersistentRoom) {
+    if (!window.confirm(`Delete room “${room.name}”? This archives the room, removes it from active room lists, revokes its invite, and preserves its project/media data.`)) return;
+    setDeletingRoomId(room.id);
+    setFormError('');
+    try {
+      await supabaseRoomService.deleteRoom(room.id);
+      setRooms((current) => current.filter((item) => item.id !== room.id));
+    } catch (cause) {
+      setFormError(cause instanceof Error ? cause.message : 'The room could not be deleted.');
+    } finally {
+      setDeletingRoomId(null);
+    }
+  }
+
   return (
     <div className="dashboard-page">
       <div className="page-heading-row"><div className="breadcrumb"><span>YOUR STUDIO</span><span className="breadcrumb__slash">/</span><span>OVERVIEW</span></div><span className="updated-note"><span className="status-dot" /> Rooms saved to Supabase</span></div>
@@ -184,7 +199,7 @@ export default function DashboardPage() {
 
       <section className="recent-section">
         <div className="dashboard-section-title dashboard-section-title--compact"><div><span className="eyebrow">YOUR CALL-SHEET</span><h2>Recent rooms</h2></div><button className="button button--quiet" type="button" onClick={() => void refreshRooms()} disabled={loadingRooms}>Refresh</button></div>
-        {loadingRooms ? <div className="loading-card panel" aria-live="polite"><span className="status-dot" /> Loading rooms…</div> : rooms.length === 0 ? <div className="empty-room-list panel"><span className="panel-icon panel-icon--amber"><UsersRound size={17} /></span><div><strong>No rooms on your call-sheet yet</strong><small>Create a room or join a cast to see it here. Rooms persist even when you disconnect.</small></div></div> : <div className="room-list">{rooms.map((room) => <Link className="room-list-item" to={`/room/${room.id}/lobby`} key={room.id}><span className="room-list-item__poster"><Clapperboard size={17} /></span><span className="room-list-item__name"><strong>{room.name}</strong><small>{room.targetLanguage} · Updated {new Date(room.updatedAt).toLocaleDateString()}</small></span><span className="room-list-item__visibility">{room.visibility === 'public' ? <Globe2 size={14} /> : <LockKeyhole size={14} />}{room.visibility}</span><ArrowRight size={16} className="room-list-item__arrow" /></Link>)}</div>}
+        {loadingRooms ? <div className="loading-card panel" aria-live="polite"><span className="status-dot" /> Loading rooms…</div> : rooms.length === 0 ? <div className="empty-room-list panel"><span className="panel-icon panel-icon--amber"><UsersRound size={17} /></span><div><strong>No rooms on your call-sheet yet</strong><small>Create a room or join a cast to see it here. Rooms persist even when you disconnect.</small></div></div> : <div className="room-list">{rooms.map((room) => <div className="room-list-item" key={room.id}><Link className="room-list-item__main" to={`/room/${room.id}/lobby`}><span className="room-list-item__poster"><Clapperboard size={17} /></span><span className="room-list-item__name"><strong>{room.name}</strong><small>{room.targetLanguage} · Updated {new Date(room.updatedAt).toLocaleDateString()}</small></span><span className="room-list-item__visibility">{room.visibility === 'public' ? <Globe2 size={14} /> : <LockKeyhole size={14} />}{room.visibility}</span><ArrowRight size={16} className="room-list-item__arrow" /></Link><button className="room-list-item__delete" type="button" onClick={() => void deleteRoom(room)} disabled={deletingRoomId === room.id} aria-label={`Delete ${room.name}`} title="Delete room">{deletingRoomId === room.id ? '…' : <Trash2 size={15} />}</button></div>)}</div>}
       </section>
 
       {createdInvite && <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setCreatedInvite(null); }}><section className="invite-modal panel" role="dialog" aria-modal="true" aria-labelledby="created-invite-title"><span className="panel-icon panel-icon--violet"><LockKeyhole size={19} /></span><span className="section-kicker"><span className="kicker-line" /> ROOM READY</span><h2 id="created-invite-title">Your private room is open.</h2><p>Save this invitation now. For security, the code is not stored in readable form and won't be shown again.</p><label className="field-label" htmlFor="invite-url">Private invitation link<input id="invite-url" className="text-input invite-url-input" readOnly value={inviteUrl} onFocus={(event) => event.currentTarget.select()} /></label><div className="invite-code-preview"><span>INVITE CODE · {createdInvite.expiresAt ? `EXPIRES ${new Date(createdInvite.expiresAt).toLocaleDateString()}` : 'ONE-TIME DISPLAY'}</span><code>{createdInvite.code}</code></div><div className="invite-modal__actions"><button className="button button--quiet" type="button" onClick={() => void copyInvitation()}>{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? 'Link copied' : 'Copy link'}</button><button className="button button--primary" type="button" onClick={() => navigate(`/room/${createdInvite.room.id}/lobby`)}>Open room <ArrowRight size={16} /></button></div></section></div>}
