@@ -202,7 +202,7 @@ export const supabaseStudioService = {
     const { error } = await client().from('project_editor_state').upsert({
       project_id: input.projectId,
       room_id: input.roomId,
-      scene_asset_id: input.sceneAssetId,
+      ...(input.sceneAssetId ? { scene_asset_id: input.sceneAssetId } : {}),
       playback_position_seconds: Math.max(0, input.playbackPositionSeconds),
       track_mix: input.trackMix,
       revision: Math.max(1, input.revision + 1),
